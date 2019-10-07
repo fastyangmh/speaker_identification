@@ -130,9 +130,9 @@ if __name__ == "__main__":
     # evaluation
     pred_train, acc_train, prob_train = evaluation(x_train_std, y_train, model)
     pred_test, acc_test, prob_test = evaluation(x_test_std, y_test, model)
-    print('Trainset accuracy: {}, imposter: {}'.format(
+    print('Trainset accuracy: {}, unclassifiable: {}'.format(
         *np.round((acc_train, (pred_train == -1).sum()/len(pred_train)), 4)))
-    print('Testset accuracy: {}, imposter: {}'.format(
+    print('Testset accuracy: {}, unclassifiable: {}'.format(
         *np.round((acc_test, (pred_test == -1).sum()/len(pred_test)), 4)))
 
     # load 3sec data
@@ -141,7 +141,7 @@ if __name__ == "__main__":
     data_3sec_std = stsc.transform(data_3sec)
     pred_3sec, acc_3sec, prob_3sec = evaluation(
         data_3sec_std, label_3sec_ohe, model)
-    print('3 second accuracy: {}, imposter: {}'.format(
+    print('3 second accuracy: {}, unclassifiable: {}'.format(
         *np.round((acc_3sec, (pred_3sec == -1).sum()/len(pred_3sec)), 4)))
 
     # load 1sec data
@@ -151,5 +151,5 @@ if __name__ == "__main__":
     data_1sec_std = stsc.transform(data_1sec)
     pred_1sec, acc_1sec, prob_1sec = evaluation(
         data_1sec_std, label_1sec_ohe, model)
-    print('1 second accuracy: {}, imposter: {}'.format(
+    print('1 second accuracy: {}, unclassifiable: {}'.format(
         *np.round((acc_1sec, (pred_1sec == -1).sum()/len(pred_1sec)), 4)))
