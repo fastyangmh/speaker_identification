@@ -48,7 +48,8 @@ def train_loop(dataloader, model, optimizer, criterion, epochs):
             if USE_CUDA:
                 x, y = x.cuda(), y.cuda()
             yhat = model(x)
-            loss = criterion(yhat, y)
+            loss = criterion(
+                yhat, y)+torch.mean(torch.tensor([torch.tensor([0.5])-v for v in torch.max(yhat, 1)[0]]))
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -71,7 +72,10 @@ def evaluation(data, label, model, threshold=0.5):
         else:
             pred.append(-1)
     pred = np.array(pred)
-    acc = accuracy_score(np.argmax(label, 1), pred)
+    if len(label.shape) >= 2:
+        acc = accuracy_score(np.argmax(label, 1), pred)
+    else:
+        acc = accuracy_score(label, pred)
     return pred, acc, prob
 
 # class
@@ -153,3 +157,10 @@ if __name__ == "__main__":
         data_1sec_std, label_1sec_ohe, model)
     print('1 second accuracy: {}, unclassifiable: {}'.format(
         *np.round((acc_1sec, (pred_1sec == -1).sum()/len(pred_1sec)), 4)))
+
+    # load imposter data
+    data_imp, label_imp = load_npy(data_path, 'imposter')
+    data_imp_std = stsc.transform(data_imp)
+    pred_imp, acc_imp, prob_imp = evaluation(data_imp_std, label_imp, model)
+    print('imposter accuracy: {}, unclassifiable: {}'.format(
+        *np.round((acc_imp, (pred_imp == -1).sum()/len(pred_imp)), 4)))
