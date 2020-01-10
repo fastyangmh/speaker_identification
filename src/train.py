@@ -31,13 +31,6 @@ def load_npy(data_path, typ):
     return data, label
 
 
-def normailze(data, mean=None, std=None):
-    mean = np.mean(data, 0) if mean is None else mean
-    std = np.std(data, 0) if std is None else std
-    data_std = (data-mean)/std
-    return data_std, mean, std
-
-
 def train_loop(dataloader, model, optimizer, criterion, epochs):
     train_loader, test_loader = dataloader
     history = []
@@ -48,8 +41,7 @@ def train_loop(dataloader, model, optimizer, criterion, epochs):
             if USE_CUDA:
                 x, y = x.cuda(), y.cuda()
             yhat = model(x)
-            loss = criterion(
-                yhat, y)+torch.mean(torch.tensor([torch.tensor([0.5])-v for v in torch.max(yhat, 1)[0]]))
+            loss = criterion(yhat, y)
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -102,8 +94,7 @@ if __name__ == "__main__":
     epochs = 40
 
     # load data
-    typ = 'train'
-    data, label = load_npy(data_path, typ)
+    data, label = load_npy(data_path, 'train')
 
     # preprocessing
     ohe = OneHotEncoder(sparse=False).fit(label.reshape(-1, 1))
