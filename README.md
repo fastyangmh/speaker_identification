@@ -1,6 +1,7 @@
 #   speaker_identification
-
+[Google Colab](https://colab.research.google.com/drive/12sKidXvTXbzm6jFK5WVz6vf6JanoMgz2?authuser=1)
 ##  Abstract
+
     此專案目的為語者辨識，給予語者MFCC特徵，利用卷積神經網路的特性抓取語者重要特徵做語者辨識，下為模型效能。
     Trainset accuracy: 0.9456, unclassifiable: 0.0381
     Testset accuracy: 0.9084, unclassifiable: 0.0528
